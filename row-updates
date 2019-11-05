@@ -1,0 +1,40 @@
+function updateOutput() {
+
+    //calls input and convert to array
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var input = ss.getSheetByName("Input");
+    var inputlastRow = (input.getLastRow() - 1);
+    var inputData = input.getRange(2, 1, inputlastRow, 1).getValues();
+    Logger.log(inputData);
+
+    //calls output and convert to array
+    var output = ss.getSheetByName("Output");
+    var outputlastRow = (output.getLastRow() - 3);
+    var outputData = output.getRange(3, 2, outputlastRow, 1).getValues();
+    Logger.log(outputData);
+
+    //compares input and output and logs differences into diff array
+    var diff = outputData;
+    for (var i = 0; i < inputData.length; i++) {
+        var duplicate = false;
+        for (var j = 0; j < diff.length; j++) {
+            if (inputData[i].join() == diff[j].join()) {
+                Logger.log('duplicated line found on rows ' + i + ':' + j);
+                diff.splice(j, 1);
+                var duplicate = true;
+                break;
+            }
+        }
+        if (duplicate == false) {
+            Logger.log('not duplicated line found on row ' + i);
+            diff.push(inputData[i]);
+        }
+    }
+  
+    //inputs diff array into excel rows
+    output.insertRowsAfter(output.getLastRow() - 1, diff.length);
+    output.getRange((output.getLastRow() - diff.length), 2, diff.length, 1).setValues(diff);
+
+    return Logger.log(diff);
+
+}
