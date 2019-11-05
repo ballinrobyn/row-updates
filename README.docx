@@ -1,1 +1,7 @@
-Google Sheet DADAD
+Google Sheet Automation functions using App Script
+
+To access editor on Google Sheets:
+Tools > Script Editor
+
+Actions available so far:
+1. Row Updates
